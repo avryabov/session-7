@@ -18,7 +18,8 @@ public class Consumer implements Runnable {
         this.doneJobs = doneJobs;
     }
 
-    @Override public void run() {
+    @Override
+    public void run() {
         System.out.println("Consumer Thread[" + Thread.currentThread().getId() + "] started.");
         try {
             while (true) {
@@ -26,15 +27,14 @@ public class Consumer implements Runnable {
 
                 executeJob(job);
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             System.out.println("e = " + e);
         }
     }
 
     private Job getJob() {
         synchronized (store) {
-            while(store.cnt == 0) {
+            while (store.cnt == 0) {
                 try {
                     store.wait();
                 } catch (InterruptedException e) {

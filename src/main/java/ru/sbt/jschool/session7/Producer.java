@@ -13,7 +13,8 @@ public class Producer implements Runnable {
         this.store = store;
     }
 
-    @Override public void run() {
+    @Override
+    public void run() {
         try {
             while (true) {
                 if (store.cnt < JobsStore.JOB_STORE_SIZE)
@@ -23,8 +24,7 @@ public class Producer implements Runnable {
 
                 Thread.sleep(JOB_PRODUCE_TIME);
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             System.out.println("e = " + e);
         }
     }
@@ -32,8 +32,8 @@ public class Producer implements Runnable {
     private void generateJob() {
         synchronized (store) {
             store.store[store.cnt] = new Job(i);
-            i = i+1;
-            store.cnt = store.cnt+1;
+            i = i + 1;
+            store.cnt = store.cnt + 1;
             store.notify();
         }
     }
