@@ -3,16 +3,14 @@ package ru.sbt.jschool.session7.Problem5;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 /**
  */
 public class FileReaderThread implements Runnable {
 
-    ConcurrentMap<String, String> fileStore;
-
-    File dir;
+    private ConcurrentMap<String, String> fileStore;
+    private File dir;
 
     public FileReaderThread(File dir, ConcurrentMap<String, String> fileStore) {
         this.dir = dir;
@@ -22,12 +20,12 @@ public class FileReaderThread implements Runnable {
     @Override
     public void run() {
         File[] files = dir.listFiles();
-        for(File file: files) {
+        for (File file : files) {
             if (fileStore.putIfAbsent(file.getName(), "") == null) {
-                StringBuffer data = new StringBuffer();
+                StringBuilder data = new StringBuilder();
                 try (Scanner in = new Scanner(file)) {
                     while (in.hasNext())
-                        data.append(in.nextLine()).append("\n");
+                        data.append(in.nextLine()).append(" ");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
