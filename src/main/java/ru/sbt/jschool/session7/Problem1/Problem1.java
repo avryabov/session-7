@@ -1,25 +1,31 @@
 package ru.sbt.jschool.session7.Problem1;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Problem1 {
+
+    private final AtomicInteger count = new AtomicInteger(0);
 
     public static void main(String[] args) {
         Problem1 problem1 = new Problem1();
-        new Thread(problem1.new MyThread(50)).start();
+        new Thread(problem1.new MyThread()).start();
     }
 
     public class MyThread implements Runnable {
 
-        private int count = 0;
-
-        public MyThread(int count) {
-            this.count = count;
-        }
-
         @Override
         public void run() {
-            if(count > 0)
-                new Thread(new MyThread(count-1)).start();
-            System.out.println("Hello from Thread-" + count);
+            int cnt = count.incrementAndGet();
+            if(cnt < 50) {
+                Thread thread = new Thread(new MyThread());
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("Hello from Thread-" + cnt);
         }
     }
 }
