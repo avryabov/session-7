@@ -8,11 +8,12 @@ public class Problem4 {
 
     private static final int COUNT = 100;
 
-    private AtomicInteger cnt = new AtomicInteger(0);
+    private Object obj = new Object();
+    private volatile int cnt = 0;
     private List<Thread> pool;
 
     public int doIt() {
-        cnt.set(0);
+        cnt = 0;
         pool = new ArrayList<>();
         for (int i = 0; i < COUNT; i++) {
             Thread thread = new Thread(new MyThread());
@@ -22,7 +23,7 @@ public class Problem4 {
         for (Thread thread : pool)
             while (thread.isAlive()) {
             }
-        return cnt.get();
+        return cnt;
     }
 
     public static void main(String[] args) {
@@ -39,7 +40,9 @@ public class Problem4 {
         @Override
         public void run() {
             for (int i = 0; i < COUNT; i++) {
-                cnt.incrementAndGet();
+                synchronized (obj) {
+                    cnt++;
+                }
             }
         }
     }
