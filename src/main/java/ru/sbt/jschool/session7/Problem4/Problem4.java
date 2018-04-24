@@ -20,9 +20,13 @@ public class Problem4 {
             pool.add(thread);
             thread.start();
         }
-        for (Thread thread : pool)
-            while (thread.isAlive()) {
+        for (Thread thread : pool) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+        }
         return cnt;
     }
 
